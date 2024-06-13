@@ -46,12 +46,10 @@ android {
 }
 
 dependencies {
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("junit:junit:4.13.2")
     implementation(libs.androidx.activity)
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.recyclerview)
-    val cameraxVersion = "1.3.0"
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -77,10 +75,6 @@ dependencies {
     implementation("androidx.room:room-paging:2.6.0")
     implementation("androidx.room:room-runtime:2.6.0")
     kapt("androidx.room:room-compiler:2.6.0")
-
-    implementation("androidx.camera:camera-camera2:$cameraxVersion")
-    implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
-    implementation("androidx.camera:camera-view:$cameraxVersion")
 
     testImplementation("androidx.arch.core:core-testing:2.2.0") // InstantTaskExecutorRule
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1") //TestDispatcher
