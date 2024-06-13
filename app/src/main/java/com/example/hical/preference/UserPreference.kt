@@ -32,19 +32,27 @@ class UserPreference constructor(private val dataStore: DataStore<Preferences>) 
         }
     }
 
-    suspend fun saveCookie(cookie: String) {
-        dataStore.edit { preferences ->
-            preferences[COOKIE_KEY] = cookie
+    fun isUserLoggedIn(): Flow<Boolean> {
+        return dataStore.data.map { preferences ->
+            preferences[IS_LOGIN_KEY] ?: false
         }
     }
 
-    fun getCookie() = dataStore.data.map { preferences -> preferences[COOKIE_KEY] ?: "" }
+    suspend fun logout() {
+        dataStore.edit { preferences ->
+            preferences.clear()
+        }
+    }
+
+    suspend fun saveToken(token: String) {
+        dataStore.edit { preferences ->
+            preferences[TOKEN_KEY] = token
+        }
+    }
 
     companion object {
         @Volatile
         private var INSTANCE: UserPreference? = null
-
-        private val COOKIE_KEY = stringPreferencesKey("cookie")
         private val EMAIL_KEY = stringPreferencesKey("email")
         private val TOKEN_KEY = stringPreferencesKey("token")
         private val IS_LOGIN_KEY = booleanPreferencesKey("isLogin")

@@ -10,7 +10,6 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -18,13 +17,11 @@ import androidx.lifecycle.lifecycleScope
 import com.example.hical.ViewModelFactory
 import com.example.hical.dashboard.DashboardActivity
 import com.example.hical.databinding.ActivityLoginBinding
-import com.example.hical.main.MainActivity
 import com.example.hical.preference.UserModel
 import com.example.hical.response.LoginResponse
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
-
 
 class LoginActivity : AppCompatActivity() {
     private val viewModel by viewModels<LoginViewModel> {
@@ -36,7 +33,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        enableEdgeToEdge()
 
         setupView()
         setupAction()
@@ -68,8 +64,6 @@ class LoginActivity : AppCompatActivity() {
                     val token = successResponse.token ?: ""
                     viewModel.saveSession(UserModel(email, token))
 
-//                    successResponse.message?.let { it1 -> showToast(it1) }
-
                     AlertDialog.Builder(this@LoginActivity).apply {
                         setTitle("Welcome Back")
                         setMessage("Let's continue our journey!")
@@ -94,13 +88,11 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-
     private fun handleHttpException(e: HttpException) {
         try {
             val errorBody = e.response()?.errorBody()?.string()
             val errorResponse = Gson().fromJson(errorBody, LoginResponse::class.java)
-            // Menampilkan pesan khusus jika gagal login
-            showToast("email and password invalid, try again!")
+            showToast("Email and password invalid, try again!")
         } catch (ex: Exception) {
             Log.e("LoginError", "Error parsing response: ${ex.message}", ex)
             showToast("Login failed. Please try again.")
@@ -112,16 +104,14 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun playAnimation() {
-
         ObjectAnimator.ofFloat(binding.imageView7, View.TRANSLATION_X, -30f, 30f).apply {
             duration = 6000
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.REVERSE
         }.start()
 
-        // TextView and Button animations
         val image = ObjectAnimator.ofFloat(binding.imageView7, View.ALPHA, 0f, 1f).setDuration(500)
-        val email= ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 0f, 1f).setDuration(500)
+        val email = ObjectAnimator.ofFloat(binding.emailTextView, View.ALPHA, 0f, 1f).setDuration(500)
         val editTextEmail = ObjectAnimator.ofFloat(binding.emailEditText, View.ALPHA, 0f, 1f).setDuration(500)
         val password = ObjectAnimator.ofFloat(binding.passwordTextView, View.ALPHA, 0f, 1f).setDuration(500)
         val editTextPassword = ObjectAnimator.ofFloat(binding.passwordEditText, View.ALPHA, 0f, 1f).setDuration(500)
@@ -132,11 +122,12 @@ class LoginActivity : AppCompatActivity() {
         }
 
         AnimatorSet().apply {
-            playSequentially( image, email, editTextEmail, password, editTextPassword, buttonSet)
-            startDelay = 500 // Optional start delay before starting the animation
+            playSequentially(image, email, editTextEmail, password, editTextPassword, buttonSet)
+            startDelay = 500
             start()
         }
     }
+
     private fun showLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
